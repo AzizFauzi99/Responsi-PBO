@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 public class AslabModel {
 
     Aslab_DB koneksi = new Aslab_DB();
-    AslabView AslabVieww = new AslabView();
+    //AslabView AslabVieww = new AslabView();
     
     public String[][] readContact(){
         try{
@@ -51,7 +51,7 @@ public class AslabModel {
         double fwawancara = Float.parseFloat(wawancara);
         double nilai = (fportofolio + fmicroteaching +fwawancara)/3;
         try {
-            String query = "Select * from aslab WHERE judul =" + Nama; // cek apakah data sudah ada
+            String query = "Select * from aslab WHERE judul = '" + Nama + "'"; // cek apakah data sudah ada
             System.out.println(Nama);
             ResultSet resultSet = koneksi.statement.executeQuery(query);
 
@@ -84,7 +84,7 @@ public class AslabModel {
         double nilai = (fportofolio + fmicroteaching +fwawancara)/3; 
         
         try {
-            String query = "Select * from aslab WHERE judul =" + Nama;
+            String query = "Select * from aslab WHERE judul = '"+ Nama + "'";
             ResultSet resultSet = koneksi.statement.executeQuery(query);
 
             while (resultSet.next()){
@@ -92,7 +92,7 @@ public class AslabModel {
             }
 
             if (jmlData==1) { 
-                query = "UPDATE aslab SET Nama='" + Nama + "', portofolio ='" + fportofolio + "', microteaching='" + fmicroteaching +"', wawancara='" + fwawancara  + "', hasil = '" + nilai+ "WHERE Nama=" + Nama;
+                query = "UPDATE aslab SET judul ='" + Nama + "', portofolio ='" + fportofolio + "', microteaching='" + fmicroteaching +"', wawancara='" + fwawancara  + "', nilai = '" + nilai+ "' WHERE judul = '" + Nama +"'";
                 koneksi.statement = (Statement) koneksi.koneksi.createStatement();
                 koneksi.statement.executeUpdate(query); //execute querynya
                 System.out.println("Berhasil diupdate");
