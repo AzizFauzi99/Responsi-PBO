@@ -14,13 +14,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 public class AslabController {
-    AslabView AslabVieww = new AslabView();
-    AslabModel AslabModell = new AslabModel();
+    AslabView AslabVieww;
+    AslabModel AslabModell;
     public String dataterpilih;
     
-    public AslabController(AslabView av, AslabModel am) {
-        this.AslabVieww = av;
-        this.AslabModell = am;
+    public AslabController(AslabView AslabVieww, AslabModel AslabModell) {
+        this.AslabVieww = AslabVieww;
+        this.AslabModell = AslabModell;
         
         if(AslabModell.getBanyakData()!=0){
             String dataKaryawan[][] = AslabModell.readContact();
@@ -74,18 +74,49 @@ public class AslabController {
         AslabVieww.btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                String nama = AslabVieww.getNama();
-                AslabModell.deleteContact(nama);              
+                int input = JOptionPane.showConfirmDialog(null,
+                        "Apa anda ingin menghapus Aslab " + dataterpilih + "? ", "Pilih Opsi...", JOptionPane.YES_NO_OPTION);
+
+                if (input == 0) {      
+                    String nama = AslabVieww.getNama();
+                    AslabModell.deleteContact(nama);  
+                    
+                    String dataNilai[][] = AslabModell.readContact();
+                    AslabVieww.tabel.setModel((new JTable(dataNilai, AslabVieww.namaKolom)).getModel());
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tidak Jadi Dihapus");
+                }        
+               
+                /*String nama = AslabVieww.getNama();
+                AslabModell.deleteContact(nama);  
+                
+                String dataKaryawan[][] = AslabModell.readContact();
+                AslabVieww.tabel.setModel((new JTable(dataKaryawan, AslabVieww.namaKolom)).getModel());*/
             }
         });
         
         AslabVieww.tabel.addMouseListener(new MouseAdapter(){    
+        @Override
         public void mouseClicked(MouseEvent e) {
                 super.mousePressed(e);
                 int baris = AslabVieww.tabel.getSelectedRow();
-
-                dataterpilih = AslabVieww.tabel.getValueAt(baris, 0).toString();
-                System.out.println(dataterpilih);
+                
+                String nama = AslabVieww.tabel.getValueAt(baris, 0).toString();
+                String p = AslabVieww.tabel.getValueAt(baris, 1).toString();
+                String m = AslabVieww.tabel.getValueAt(baris, 2).toString();
+                String w = AslabVieww.tabel.getValueAt(baris, 3).toString();              
+                
+                AslabVieww.dispose();
+                AslabView ed = new AslabView();
+                ed.tNama.setText(nama);
+                ed.tP.setText(p);
+                ed.tM.setText(m);
+                ed.tW.setText(w);              
+               
+                AslabModel am = new AslabModel();
+                AslabController ct = new AslabController(ed, am);
+                
                 
             }
             
